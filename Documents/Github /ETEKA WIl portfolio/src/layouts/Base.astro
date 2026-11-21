@@ -1,0 +1,85 @@
+---
+import "../styles/global.css";
+import SocialLinks from "../components/SocialLinks.astro";
+import { identite } from "../data/profil";
+import { getCollection } from "astro:content";
+const aDesArticles = (await getCollection("blog", ({ data }) => !data.brouillon)).length > 0;
+
+interface Props { title?: string; description?: string }
+const {
+  title = `${identite.nom} · ${identite.titre}`,
+  description = identite.intro,
+} = Astro.props;
+const nav = [
+  { href: "/#a-propos", label: "À propos" },
+  { href: "/#produits", label: "Produits" },
+  { href: "/#parcours", label: "Parcours" },
+  ...(aDesArticles ? [{ href: "/blog", label: "Articles" }] : []),
+];
+---
+<!doctype html>
+<html lang="fr" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site)} />
+    <meta property="og:image" content={new URL("/og-image.png", Astro.site)} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={new URL("/og-image.png", Astro.site)} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+  </head>
+  <body class="bg-ink font-sans text-slate-300 antialiased selection:bg-accent/30 selection:text-white">
+    <header class="fixed inset-x-0 top-0 z-50 border-b border-white/5 bg-ink/70 backdrop-blur-md">
+      <nav class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-4">
+        <a href="/" class="flex items-center gap-2 font-semibold text-white">
+          <img src="/logo-mark.png" alt="" width="40" height="40" class="h-8 w-8 object-contain sm:hidden" />
+          <img src="/logo.png" alt={identite.nom} width="968" height="120" class="hidden h-7 w-auto sm:block" />
+        </a>
+        <ul class="hidden items-center gap-8 text-sm md:flex">
+          {nav.map((n) => <li><a href={n.href} class="transition hover:text-white">{n.label}</a></li>)}
+        </ul>
+        <div class="flex items-center gap-2">
+          <SocialLinks variant="icons" />
+          <a href={identite.rendezVous} target="_blank" rel="noopener"
+             class="ml-1 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-ink transition hover:bg-slate-200">Rendez-vous</a>
+        </div>
+      </nav>
+    </header>
+
+    <main><slot /></main>
+
+    <footer class="border-t border-white/5 py-10">
+      <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 text-sm text-slate-500">
+        <div class="flex flex-wrap items-center gap-3">
+          <img src="/logo-mark.png" alt="" width="28" height="28" class="h-7 w-7 object-contain" />
+          <p>© {new Date().getFullYear()} {identite.nom}</p>
+          <span class="text-slate-700">·</span>
+          <a href="/mentions-legales" class="transition hover:text-white">Mentions légales</a>
+        </div>
+        <SocialLinks variant="icons" />
+      </div>
+    </footer>
+
+    <script>
+      // Apparition des éléments .reveal au défilement
+      const io = new IntersectionObserver(
+        (entries) => entries.forEach((e) => {
+          if (e.isIntersecting) { e.target.classList.add("is-visible"); io.unobserve(e.target); }
+        }),
+        { threshold: 0.15, rootMargin: "0px 0px -40px 0px" }
+      );
+      document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+    </script>
+  </body>
+</html>

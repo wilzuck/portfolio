@@ -1,0 +1,31 @@
+---
+import Icon from "./Icon.astro";
+import { reseaux } from "../data/profil";
+interface Props { variant?: "pills" | "icons" }
+const { variant = "pills" } = Astro.props;
+const liens = [reseaux.github, reseaux.linkedin];
+---
+{variant === "icons" ? (
+  <div class="flex items-center gap-2">
+    {liens.map((l) => (
+      <a href={l.url} target="_blank" rel="noopener" aria-label={l.label}
+         class="grid h-9 w-9 place-items-center rounded-lg text-slate-400 transition hover:bg-white/5 hover:text-white">
+        <Icon name={l.label.toLowerCase()} class="h-[18px] w-[18px]" />
+      </a>
+    ))}
+  </div>
+) : (
+  <div class="flex flex-wrap gap-3">
+    {liens.map((l) => (
+      <a href={l.url} target="_blank" rel="noopener"
+         class="group inline-flex items-center gap-3 rounded-xl border border-white/10 bg-white/[.03] px-4 py-2.5 text-sm transition hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/[.06]">
+        <Icon name={l.label.toLowerCase()} class="h-5 w-5 text-white" />
+        <span class="flex flex-col leading-tight">
+          <span class="font-semibold text-white">{l.label}</span>
+          <span class="text-xs text-slate-400">{l.pseudo}</span>
+        </span>
+        <span class="text-slate-500 transition group-hover:translate-x-0.5 group-hover:text-white">↗</span>
+      </a>
+    ))}
+  </div>
+)}

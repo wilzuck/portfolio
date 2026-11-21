@@ -1,0 +1,76 @@
+@import "tailwindcss";
+@import "@fontsource-variable/inter";
+@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource/jetbrains-mono/500.css";
+
+@theme {
+  --font-sans: "Inter Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --color-ink: #0B0F17;
+  --color-accent: #5B8CFF;
+  --color-accent-soft: #A5BEFF;
+  --color-mint: #3DDC97;
+}
+
+.grid-bg {
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / .04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / .04) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse at 50% 30%, black 40%, transparent 75%);
+}
+
+/* ---------- Animations ---------- */
+
+/* Entrée en cascade (accroche) */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-in {
+  opacity: 0;
+  animation: fade-up .8s cubic-bezier(.16, 1, .3, 1) forwards;
+  animation-delay: calc(var(--d, 0) * 120ms);
+}
+
+/* Halo qui respire */
+@keyframes glow {
+  0%, 100% { opacity: .55; transform: translateX(-50%) scale(1); }
+  50%      { opacity: .9;  transform: translateX(-50%) scale(1.08); }
+}
+.animate-glow { animation: glow 8s ease-in-out infinite; }
+
+/* Carte de code qui flotte */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+.animate-float { animation: float 6s ease-in-out infinite; }
+
+/* Dégradé du titre qui glisse doucement */
+@keyframes shine {
+  to { background-position: 200% center; }
+}
+.text-shine {
+  background-size: 200% auto;
+  animation: shine 6s linear infinite;
+}
+
+/* Curseur clignotant dans la carte de code */
+@keyframes blink { 50% { opacity: 0; } }
+.caret::after { content: "▋"; margin-left: 2px; animation: blink 1s step-end infinite; }
+
+/* Apparition au défilement (gérée par un petit script dans Base.astro) */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity .8s cubic-bezier(.16, 1, .3, 1), transform .8s cubic-bezier(.16, 1, .3, 1);
+  transition-delay: calc(var(--d, 0) * 100ms);
+}
+.reveal.is-visible { opacity: 1; transform: none; }
+
+/* Respecte le réglage « réduire les animations » du visiteur */
+@media (prefers-reduced-motion: reduce) {
+  .animate-in, .reveal { opacity: 1 !important; transform: none !important; animation: none !important; transition: none !important; }
+  .animate-glow, .animate-float, .text-shine, .caret::after { animation: none !important; }
+}

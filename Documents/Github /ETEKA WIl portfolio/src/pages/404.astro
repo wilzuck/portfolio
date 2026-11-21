@@ -1,0 +1,19 @@
+---
+import Base from "../layouts/Base.astro";
+---
+<Base title="Page introuvable · Wilfried ETEKA" description="Cette page n'existe pas.">
+  <section class="relative flex min-h-[80vh] items-center overflow-hidden pt-24">
+    <div class="grid-bg pointer-events-none absolute inset-0"></div>
+    <div class="animate-glow pointer-events-none absolute top-0 left-1/2 h-[380px] w-[620px] rounded-full bg-accent/20 blur-[120px]"></div>
+    <div class="relative mx-auto max-w-xl px-6 text-center">
+      <p class="animate-in font-mono text-sm text-accent-soft">Erreur 404</p>
+      <h1 class="animate-in mt-4 text-5xl font-extrabold tracking-tight text-white md:text-6xl" style="--d:1">Page introuvable</h1>
+      <p class="animate-in mt-6 text-lg text-slate-400" style="--d:2">Le lien est peut-être ancien, ou la page a été déplacée.</p>
+      <div class="animate-in mx-auto mt-8 w-fit rounded-xl border border-white/10 bg-white/[.03] px-5 py-3 text-left font-mono text-sm" style="--d:3">
+        <p><span class="text-accent-soft">agent</span>.<span class="text-mint">find</span>(<span class="text-amber-300">"cette page"</span>)</p>
+        <p class="caret text-slate-500">→ 0 résultat</p>
+      </div>
+      <a href="/" class="animate-in mt-10 inline-flex rounded-lg bg-white px-6 py-3 font-semibold text-ink transition hover:bg-slate-200" style="--d:4">Retour à l'accueil</a>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,28 @@
+---
+import Base from "../../layouts/Base.astro";
+import { getCollection } from "astro:content";
+const articles = (await getCollection("blog", ({ data }) => !data.brouillon))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const fmt = (d: Date) => d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+---
+<Base title="Articles · Wilfried ETEKA" description="Articles sur l'IA en production, l'architecture et la création de produits.">
+  <section class="mx-auto max-w-3xl px-6 pt-36 pb-24">
+    <p class="animate-in font-mono text-sm text-accent-soft">Articles</p>
+    <h1 class="animate-in mt-3 text-4xl font-extrabold tracking-tight text-white" style="--d:1">Ce que j'apprends en construisant</h1>
+    {articles.length === 0 ? (
+      <p class="animate-in mt-10 text-slate-400" style="--d:2">Les premiers articles arrivent bientôt.</p>
+    ) : (
+      <ul class="mt-12 space-y-4">
+        {articles.map((a, i) => (
+          <li class="reveal" style={`--d:${i}`}>
+            <a href={`/blog/${a.id}`} class="block rounded-2xl border border-white/10 p-6 transition hover:-translate-y-0.5 hover:border-accent/40 hover:bg-white/[.03]">
+              <p class="text-sm text-slate-500">{fmt(a.data.date)}</p>
+              <h2 class="mt-1 text-xl font-semibold text-white">{a.data.titre}</h2>
+              <p class="mt-2 text-slate-400">{a.data.description}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
+</Base>
